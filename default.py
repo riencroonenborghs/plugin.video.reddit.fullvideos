@@ -1,8 +1,8 @@
 import xbmcaddon, xbmcgui, xbmcplugin
-import sys
-import urllib2
-import re
+import sys, cgi, re
+import urllib2, urlparse
 from xml.dom import minidom
+from resources.pytube import YouTube
 
 __plugin__  = sys.argv[0]
 __id__      = int(sys.argv[1])
@@ -47,7 +47,7 @@ class parser:
         match       = re.search('watch\?v=([a-zA-Z0-9]*)\"', description)
         if match:
           video_id  = match.group(1)
-          url       = "%s?v=%s" % (__plugin__, video_id)
+          url       = "%s?video_id=%s" % (__plugin__, video_id)
           listitem  = xbmcgui.ListItem(title, iconImage = "DefaultFolder.png", thumbnailImage = thumbnail)
           xbmcplugin.addDirectoryItem(handle = __id__, url = url, listitem = listitem,  isFolder = True)
       xbmcplugin.endOfDirectory(__id__)
@@ -68,18 +68,49 @@ class fullmoviesonyoutube:
   def __init__(self):
     self.subreddit = 'fullmoviesonyoutube'
   
+  # get main listing
   def index(self):
     data = rss(self.subreddit).fetch()
     parser(data).to_gui('folder')
 
-  def play(self, video_id):
-    url = "https://www.youtube.com/watch%s" % video_id
-    xbmc.log("-- url: %s" % url)
-    listitem = xbmcgui.ListItem(path = url)
-    xbmc.Player().play(url, listitem, False, -1)
-    return(xbmcplugin.setResolvedUrl(handle = __id__, succeeded = True, listitem = listitem))
+  # list all streams for a video
+  def list(self, video_id):    
+    for index, video in self.videos(video_id):
+      url       = "%s?video_id=%s&index=%s" % (__plugin__, video_id, index)
+      listitem  = xbmcgui.ListItem(video.video_codec, iconImage = "DefaultFolder.png", thumbnailImage = "")
+      xbmcplugin.addDirectoryItem(handle = __id__, url = url, listitem = listitem,  isFolder = True)
+    xbmcplugin.endOfDirectory(__id__)
 
-if sys.argv[2] == "":
-  fullmoviesonyoutube().index()
+  # play the video stream
+  def play(self, video_id, index):
+    for index2, video in self.videos(video_id):
+      if index == index2:
+        # video     = self.videos(video_id)[index]
+        url       = video.url
+        listitem  = xbmcgui.ListItem(path = url)
+        xbmc.Player().play(url, listitem, False, -1)
+        return(xbmcplugin.setResolvedUrl(handle = __id__, succeeded = True, listitem = listitem))
+
+  def full_url(self, video_id):
+    full_url = "https://www.youtube.com/watch?v=%s" % video_id
+    return full_url
+
+  def youtube(self, video_id):
+    youtube     = YouTube()
+    youtube.url = self.full_url(video_id)
+    return youtube
+
+  def videos(self, video_id):
+    return enumerate(self.youtube(video_id).videos)
+
+
+# MAIN
+params = cgi.parse_qs(urlparse.urlparse(sys.argv[2])[4])
+if params:
+  if params.get('video_id') != None:
+    if params.get('index') == None:
+      fullmoviesonyoutube().list(params['video_id'][0])
+    else:
+      fullmoviesonyoutube().play(params['video_id'][0], int(params['index'][0]))
 else:
-  fullmoviesonyoutube().play(sys.argv[2])
+  fullmoviesonyoutube().index()
