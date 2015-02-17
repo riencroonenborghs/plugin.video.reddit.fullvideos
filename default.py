@@ -76,8 +76,11 @@ class fullmoviesonyoutube:
   # list all streams for a video
   def list(self, video_id):    
     for index, video in self.videos(video_id):
-      url       = "%s?video_id=%s&index=%s" % (__plugin__, video_id, index)
-      listitem  = xbmcgui.ListItem(video.video_codec, iconImage = "DefaultFolder.png", thumbnailImage = "")
+      url         = "%s?video_id=%s&index=%s" % (__plugin__, video_id, index)
+      codec       = video.video_codec.encode('latin-1', 'ignore')
+      resolution  = video.resolution.encode('latin-1', 'ignore')
+      label       = "%s (%s)" % (resolution, codec)
+      listitem    = xbmcgui.ListItem(label, iconImage = "DefaultFolder.png", thumbnailImage = "")
       xbmcplugin.addDirectoryItem(handle = __id__, url = url, listitem = listitem,  isFolder = True)
     xbmcplugin.endOfDirectory(__id__)
 
@@ -85,7 +88,6 @@ class fullmoviesonyoutube:
   def play(self, video_id, index):
     for index2, video in self.videos(video_id):
       if index == index2:
-        # video     = self.videos(video_id)[index]
         url       = video.url
         listitem  = xbmcgui.ListItem(path = url)
         xbmc.Player().play(url, listitem, False, -1)
