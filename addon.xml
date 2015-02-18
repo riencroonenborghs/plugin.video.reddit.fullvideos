@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.reddit.fullvideos" version="0.2.4" name="Reddit's /r/_X_onyoutube" provider-name="lipwiggler">
+<addon id="plugin.video.reddit.fullvideos" version="0.2.6" name="Reddit's /r/_X_onyoutube" provider-name="lipwiggler">
   <requires></requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>

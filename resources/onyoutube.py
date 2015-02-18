@@ -18,13 +18,20 @@ class onyoutube:
       title       = parser.element_text(item, 'title')
       thumbnail   = parser.attribute_value(item, 'media:thumbnail', 'url')
       description = parser.element_text(item, 'description')        
-      match       = re.search('watch\?v=([a-zA-Z0-9]*)\"', description)
+      match       = re.search('watch\?v=([a-zA-Z0-9_]*)', description)
       if match:
         video_id  = match.group(1)
-        url       = "%s?subreddit=%s&video_id=%s" % (config.__plugin__, self.subreddit, video_id)
-        listitem  = xbmcgui.ListItem(title, iconImage = "DefaultFolder.png", thumbnailImage = thumbnail)
-        xbmcplugin.addDirectoryItem(handle = config.__id__, url = url, listitem = listitem,  isFolder = True)
+        self.add_dir(video_id, title, thumbnail)
+      match       = re.search('\.be\/([a-zA-Z0-9_]*)', description)
+      if match:
+        video_id  = match.group(1)
+        self.add_dir(video_id, title, thumbnail)
     xbmcplugin.endOfDirectory(config.__id__)
+
+  def add_dir(self, video_id, title, thumbnail):
+    url       = "%s?subreddit=%s&video_id=%s" % (config.__plugin__, self.subreddit, video_id)
+    listitem  = xbmcgui.ListItem(title, iconImage = "DefaultFolder.png", thumbnailImage = thumbnail)
+    xbmcplugin.addDirectoryItem(handle = config.__id__, url = url, listitem = listitem,  isFolder = True)
 
   # show all streams for a video
   def show(self, video_id):    
