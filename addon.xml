@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.reddit.fullvideos" version="0.0.73" name="Reddit's fullvideos" provider-name="lipwiggler">
+<addon id="plugin.video.reddit.fullvideos" version="0.0.80" name="Reddit's /r/fullmoviesonyoutube" provider-name="lipwiggler">
   <requires></requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">Reddit's fullvideos</summary>
-    <description lang="en">A list of full videos posted videos on /r/fullmoviesonyoutube.</description>
+    <summary lang="en">Reddit's /r/fullmoviesonyoutube</summary>
+    <description lang="en">Pick, choose and watch full movies posted on /r/fullmoviesonyoutube.</description>
     <platform>all</platform>
   </extension>
 </addon>

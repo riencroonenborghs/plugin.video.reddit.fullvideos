@@ -28,34 +28,26 @@ class rss:
     else:
       return self.data
 
-# parse data into GUI folder
-class parser:
+# parse xml data
+class xml_parser:
   def __init__(self, data):
     self.data = data
-
-  def to_gui(self, type = 'folder'):    
-    if type == 'folder':      
-      for item in self.xml_document().getElementsByTagName('item'):        
-        title       = self.get_text(item.getElementsByTagName("title")[0].childNodes)
-        thumbnail = ""
-        try:
-          thumbnail = item.getElementsByTagName('media:thumbnail')[0].attributes['url'].value
-        except BaseException, err:
-          xbmc.log("BaseException: %s" % err)
-          thumbnail = ""
-        description = self.get_text(item.getElementsByTagName("description")[0].childNodes)        
-        match       = re.search('watch\?v=([a-zA-Z0-9]*)\"', description)
-        if match:
-          video_id  = match.group(1)
-          url       = "%s?video_id=%s" % (__plugin__, video_id)
-          listitem  = xbmcgui.ListItem(title, iconImage = "DefaultFolder.png", thumbnailImage = thumbnail)
-          xbmcplugin.addDirectoryItem(handle = __id__, url = url, listitem = listitem,  isFolder = True)
-      xbmcplugin.endOfDirectory(__id__)
 
   def xml_document(self):   
     return minidom.parseString(self.data).documentElement
 
-  def get_text(self, nodelist):
+  def element_text(self, item, name):
+    return self.text(item.getElementsByTagName(name)[0].childNodes)
+
+  def attribute_value(self, item, name, attribute):
+    try:
+      return item.getElementsByTagName(name)[0].attributes[attribute].value
+    except BaseException, err:
+      xbmc.log("BaseException: %s" % err)
+    else:
+      return ""
+
+  def text(self, nodelist):
     text = []
     for node in nodelist:
         if node.nodeType == node.TEXT_NODE:
@@ -71,14 +63,25 @@ class fullmoviesonyoutube:
   # get main listing
   def index(self):
     data = rss(self.subreddit).fetch()
-    parser(data).to_gui('folder')
+    parser = xml_parser(data)
+    for item in parser.xml_document().getElementsByTagName('item'):        
+      title       = parser.element_text(item, 'title')
+      thumbnail   = parser.attribute_value(item, 'media:thumbnail', 'url')
+      description = parser.element_text(item, 'description')        
+      match       = re.search('watch\?v=([a-zA-Z0-9]*)\"', description)
+      if match:
+        video_id  = match.group(1)
+        url       = "%s?video_id=%s" % (__plugin__, video_id)
+        listitem  = xbmcgui.ListItem(title, iconImage = "DefaultFolder.png", thumbnailImage = thumbnail)
+        xbmcplugin.addDirectoryItem(handle = __id__, url = url, listitem = listitem,  isFolder = True)
+    xbmcplugin.endOfDirectory(__id__)
 
-  # list all streams for a video
-  def list(self, video_id):    
+  # show all streams for a video
+  def show(self, video_id):    
     for index, video in self.videos(video_id):
       url         = "%s?video_id=%s&index=%s" % (__plugin__, video_id, index)
-      codec       = video.video_codec.encode('latin-1', 'ignore')
-      resolution  = video.resolution.encode('latin-1', 'ignore')
+      codec       = video.video_codec.encode('ASCII', 'ignore')
+      resolution  = video.resolution.encode('ASCII', 'ignore')
       label       = "%s (%s)" % (resolution, codec)
       listitem    = xbmcgui.ListItem(label, iconImage = "DefaultFolder.png", thumbnailImage = "")
       xbmcplugin.addDirectoryItem(handle = __id__, url = url, listitem = listitem,  isFolder = True)
@@ -91,7 +94,7 @@ class fullmoviesonyoutube:
         url       = video.url
         listitem  = xbmcgui.ListItem(path = url)
         xbmc.Player().play(url, listitem, False, -1)
-        return(xbmcplugin.setResolvedUrl(handle = __id__, succeeded = True, listitem = listitem))
+        # return(xbmcplugin.setResolvedUrl(handle = __id__, succeeded = True, listitem = listitem))
 
   def full_url(self, video_id):
     full_url = "https://www.youtube.com/watch?v=%s" % video_id
@@ -111,7 +114,7 @@ params = cgi.parse_qs(urlparse.urlparse(sys.argv[2])[4])
 if params:
   if params.get('video_id') != None:
     if params.get('index') == None:
-      fullmoviesonyoutube().list(params['video_id'][0])
+      fullmoviesonyoutube().show(params['video_id'][0])
     else:
       fullmoviesonyoutube().play(params['video_id'][0], int(params['index'][0]))
 else:
