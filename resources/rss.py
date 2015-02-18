@@ -1,11 +1,19 @@
 import xbmc
 import urllib2, sys
+import resources.config as config
 
 # read RSS feed for subreddit
 class rss:
   def __init__(self, subreddit):
     self.agent  = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/534.16 (KHTML, like Gecko) Chrome/10.0.648.204 Safari/534.16'
-    self.url    = "%s/r/%s.rss" % ('http://www.reddit.com', subreddit)
+    if config.__settings__.getSetting('topic') == 'Hot':
+      self.url    = "%s/r/%s.rss" % ('http://www.reddit.com', subreddit)
+    elif config.__settings__.getSetting('topic') == 'New':
+      self.url    = "%s/r/%s/new/.rss" % ('http://www.reddit.com', subreddit)
+    elif config.__settings__.getSetting('topic') == 'Rising':
+      self.url    = "%s/r/%s/rising/.rss" % ('http://www.reddit.com', subreddit)
+    elif config.__settings__.getSetting('topic') == 'Top':
+      self.url    = "%s/r/%s/top/.rss" % ('http://www.reddit.com', subreddit)
     self.data   = ''
 
   def fetch(self):    
