@@ -2,5 +2,7 @@
 <settings>
     <category label="30100">
         <setting id="topic" type="labelenum" label="30101" values="Hot|New|Rising|Top" default="Hot" />
+        <setting type="sep"/>
+        <setting id="subreddits" type="file" label="30102" />
     </category>
 </settings>

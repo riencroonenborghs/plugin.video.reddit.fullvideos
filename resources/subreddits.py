@@ -1,10 +1,18 @@
 import xbmc, xbmcgui, xbmcplugin
 from resources.onyoutube import onyoutube
 import resources.config as config
+import json
 
 # list and show available subreddits
 class subreddits:
   def __init__(self):
+    xbmc.log(config.__settings__.getSetting('subreddits'))
+    if config.__settings__.getSetting('subreddits') == "":
+      self.load_default_subreddits()
+    else:
+      self.load_subreddits_from_file(config.__settings__.getSetting('subreddits'))
+
+  def load_default_subreddits(self):
     self.subreddits = dict()
     self.subreddits['Full Movies'] = 'fullmoviesonyoutube'
     self.subreddits['Full Foreign Movies'] = 'fullforeignmovies'
@@ -22,6 +30,12 @@ class subreddits:
     self.subreddits['Full Cartoons'] = 'FullCartoonsonYouTube'
     self.subreddits['Full Anime'] = 'FullAnimeonYouTube'
     self.subreddits['Full Westerns'] = 'FullWesternsonYouTube'
+
+  def load_subreddits_from_file(self, filename):
+    json_data = open(filename)
+    data = json.load(json_data)
+    json_data.close()
+    self.subreddits = data
   
   # get main listing
   def index(self):
