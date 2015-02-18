@@ -18,11 +18,11 @@ class onyoutube:
       title       = parser.element_text(item, 'title')
       thumbnail   = parser.attribute_value(item, 'media:thumbnail', 'url')
       description = parser.element_text(item, 'description')        
-      match       = re.search('watch\?v=([a-zA-Z0-9_]*)', description)
+      match       = re.search('watch\?v=([a-zA-Z0-9_-]*)', description)
       if match:
         video_id  = match.group(1)
         self.add_dir(video_id, title, thumbnail)
-      match       = re.search('\.be\/([a-zA-Z0-9_]*)', description)
+      match       = re.search('\.be\/([a-zA-Z0-9_-]*)', description)
       if match:
         video_id  = match.group(1)
         self.add_dir(video_id, title, thumbnail)
