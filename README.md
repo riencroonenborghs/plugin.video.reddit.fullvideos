@@ -48,6 +48,14 @@ Note that the `subreddit` part is without `/r/`!
 
 Example JSON file: `{"Full Movies":"fullmoviesonyoutube","Full Foreign Movies":"fullforeignmovies"}`
 
+### Downloads
+
+You can set a directory where your files will be downloaded to, if you choose to do so.
+
+Not that I'm endorsing this.
+
+At all.
+
 ## Internals
 
 A quick note on the internals of the add-on. When checking the posts, it will look for the `description` in the subreddit's RSS and parse any [Youtube](http://www.youtube.com)-looking URLs.
