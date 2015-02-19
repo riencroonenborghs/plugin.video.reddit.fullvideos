@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.reddit.fullvideos" version="0.3.7" name="Reddit's /r/_X_onyoutube" provider-name="lipwiggler">
+<addon id="plugin.video.reddit.fullvideos" version="0.3.53" name="Reddit's /r/_X_onyoutube" provider-name="lipwiggler">
   <requires></requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en">Reddit's /r/_X_onyoutube</summary>
-    <description lang="en">Pick, choose and watch full movies/shows/music posted on /r/fullmoviesonyoutube, /r/fullforeignmovies, /r/truehorror, /r/fullscifimovies, /r/AudiobooksonYouTube, /r/FullTVshowsonYouTube, /r/StarTrekonYouTube, /r/MusicVideosonYouTube, /r/FullConcertonYouTube, /r/FullAlbumsonYouTube, /r/SoundtracksonYouTube, /r/BollywoodonYouTube, /r/KungFuonYouTube, /r/FullCartoonsonYouTube, /r/FullAnimeonYouTube and /r/FullWesternsonYouTube.</description>
+    <description lang="en">Pick, choose and watch full movies/shows/music posted on a variety of subreddits.</description>
     <platform>all</platform>
   </extension>
 </addon>

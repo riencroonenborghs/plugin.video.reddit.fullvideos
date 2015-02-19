@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id="33100">Reddit</string>
-  <string id="33101">Topic</string>
-  <string id="33102">Subreddits file</string>
+  <string id="33101">Topic:</string>
+  <string id="33102">Load subreddits from:</string>
+  <string id="33103">Download files to:</string>
 </strings>

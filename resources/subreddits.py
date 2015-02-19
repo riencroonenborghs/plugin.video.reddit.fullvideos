@@ -41,7 +41,7 @@ class subreddits:
   def index(self):
     for title in self.subreddits:        
       subreddit = self.subreddits[title]
-      url       = "%s?subreddit=%s" % (config.__plugin__, subreddit)
+      url       = config.URL_LIST % (config.__plugin__, subreddit)
       listitem  = xbmcgui.ListItem(title, iconImage = "DefaultFolder.png", thumbnailImage = "")
       xbmcplugin.addDirectoryItem(handle = config.__id__, url = url, listitem = listitem,  isFolder = True)
     xbmcplugin.endOfDirectory(config.__id__)

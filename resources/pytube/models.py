@@ -57,7 +57,7 @@ class Video(object):
 
         # Check for conflicting filenames
         if isfile(fullpath) and not force_overwrite:
-            raise FileExistsError("\n\nError: Conflicting filename:'{}'.\n\n".format(
+            raise BaseException("\n\nError: Conflicting filename:'{}'.\n\n".format(
                   self.filename))
 
         response = urlopen(self.url)

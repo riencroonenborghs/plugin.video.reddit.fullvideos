@@ -51,3 +51,7 @@ Example JSON file: `{"Full Movies":"fullmoviesonyoutube","Full Foreign Movies":"
 ## Internals
 
 A quick note on the internals of the add-on. When checking the posts, it will look for the `description` in the subreddit's RSS and parse any [Youtube](http://www.youtube.com)-looking URLs.
+
+## Credits
+
+Many thanks to [pytube](https://github.com/nficano/pytube) to alleviate most of the hard work :)
