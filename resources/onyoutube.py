@@ -66,7 +66,7 @@ class onyoutube:
           on_progress = lambda current_size, full_size, start: dialog.update(percent = int((current_size / float(full_size)) * 100))
           video.download(download_path, on_progress = on_progress)
           dialog.update(100, heading = 'Downloaded!')
-          xmbc.sleep(1000)
+          xbmc.sleep(1000)
           dialog.close()
         except BaseException, err:
           xbmc.log("ERROR: %s" % err)
